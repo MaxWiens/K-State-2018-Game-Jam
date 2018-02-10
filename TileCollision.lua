@@ -8,6 +8,11 @@ local extends = extends
 local ipairs = ipairs 
 local love = love
 
+--debug
+local print = print 
+local io = io
+
+
 module('TileCollision')
 extends(_M, Object)
 
@@ -79,6 +84,8 @@ load = function (self, world, collisionMap, xScale, yScale, collisionType)
 				--find tile value at position
 				self.collidables[self.tileCount] = {}
 				self.collidables[self.tileCount][1] = love.physics.newBody( world, (x-1)*self.xScale, (y-1)*self.yScale, collisionType)
+				print(y, x)
+				--io.read()
 				self.collidables[self.tileCount][2] = love.physics.newChainShape(true, scaledTileReference[collisionMap[y][x]])
 				self.collidables[self.tileCount][3] = love.physics.newFixture(self.collidables[self.tileCount][1], self.collidables[self.tileCount][2])
 				self.collidables[self.tileCount][1]:setUserData(self)
