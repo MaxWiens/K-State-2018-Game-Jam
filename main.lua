@@ -35,6 +35,7 @@ end
 
 function love.update(dt)
 	midWorld:update(dt)
+	midWorld:setCallbacks( beginContact, endContact, preSolve, postSolve )
 	metaWorld:update(dt)
 	_currentStage:update(dt)
 
@@ -59,4 +60,40 @@ function love.draw()
 	love.graphics.scale( 5, 5 )
 
 	_currentStage:draw()
+end
+
+
+function beginContact(a, b, coll)
+	local acFlags = a:getUserData()._contactFlags or {}
+	local bcFlags = b:getUserData()._contactFlags or {}
+	for k,v in pairs(bcFlags) do
+		a:getUserData()._flags[k] = v
+	end
+	for k,v in pairs(acFlags) do
+		b:getUserData()._flags[k] = v
+	end
+end
+
+function endContact(a, b, coll)
+	local acFlags = a:getUserData()._contactFlags or {}
+	local bcFlags = b:getUserData()._contactFlags or {}
+	for k,v in pairs(bcFlags) do
+		a:getUserData()._flags[k] = nil
+	end
+	for k,v in pairs(acFlags) do
+		b:getUserData()._flags[k] = nil
+	end
+end
+
+function preSolve(a, b, coll)
+	-- body
+end
+
+function postSolve(a, b, coll, normalimpulse, tangentimpulse)
+
+end
+
+
+function love.keyboard.isPressed(key )
+	-- body
 end

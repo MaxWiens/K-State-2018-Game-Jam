@@ -39,6 +39,8 @@ TILE_COLLISION_REFERENCE = {
 	[25] = {0,0,	1,0,	1,.5,	0,.5} -- half up
 }
 
+local _flags
+local _contactFlags
 local layer
 local collisionMap
 local mapHeight
@@ -51,9 +53,11 @@ local collidables
 
 ---
 -- @param collisionMap 2 dymentional table whose values corrospond with a specific shape collsion
-load = function (self, world, collisionMap, xScale, yScale, collisionType)
+load = function (self, world, collisionMap, xScale, yScale, flags, contactFlags, collisionType)
 	self.xScale = xScale or 1
 	self.yScale = yScale or 1
+	self._flags = flags or {wall = false, ground = false}
+	self._contactFlags = contactFlags or {contactWall = false, contactFloor = true}
 	local collisionType = collisionType or 'static'
 	self.mapHeight = #collisionMap
 	self.mapWidth = #collisionMap[1]

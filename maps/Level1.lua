@@ -32,8 +32,9 @@ function load(self, midWorld, metaWorld)
 	self.layers[4] = f1
 
 	local m = Layer:new(TileGraphic:new(Images.ksgj, maps[1]))
-	m:add(TileCollision:new(midWorld, colMaps[1], 16, 16))
-	m:add(PlayerController:new(Player:new(midWorld, 20, 200)))
+	m:add(TileCollision:new(midWorld, colMaps[1], 16, 16, {ground = true}, {contactFloor = true}))
+	m:add(TileCollision:new(midWorld, colMaps[2], 16, 16, {wall = true},{contactWall = true}))
+	m:add(PlayerController:new(Player:new(midWorld, 100, 200)))
 	self.layers[3] = m
 end
 
