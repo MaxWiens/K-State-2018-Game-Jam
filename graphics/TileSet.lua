@@ -7,6 +7,9 @@ local Object = require 'Object'
 local love = love
 local extends = extends
 
+--debug
+local print = print 
+
 module("graphics.TileSet")
 extends(_M, Object) -- allowing the module to be used as a class
 
@@ -28,11 +31,12 @@ function load(self, imagePath, tileWidth, tileHeight)
 	local virticleTiles = imageHeight/tileHeight
 
 	local tileCount = 0
-	for y=0, imageHeight, tileHeight do
-		for x=0,imageWidth, tileWidth do
+	for y=tileHeight, imageHeight, tileHeight do
+		for x=tileWidth,imageWidth, tileWidth do
 			tileCount = tileCount + 1
-			self.quads[tileCount] = love.graphics.newQuad( x, y, tileWidth, tileHeight, imageWidth, imageHeight)
+			self.quads[tileCount] = love.graphics.newQuad( x-tileWidth, y-tileHeight, tileWidth, tileHeight, imageWidth, imageHeight)
 		end
 	end
 	self.tileCount = tileCount
+
 end

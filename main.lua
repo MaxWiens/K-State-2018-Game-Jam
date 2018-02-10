@@ -25,8 +25,7 @@ function love.load()
 	midWorld = love.physics.newWorld(0, 160)
 	metaWorld = love.physics.newWorld(0,0)
 
-	_camera = Camera:new(144, 256, metaWorld)
-
+	_camera = Camera:new(144, 256, metaWorld, 20, 200)
 
 	level1 = Level1:new(midWorld, metaWorld)
 
