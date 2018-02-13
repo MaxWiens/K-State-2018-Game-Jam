@@ -19,6 +19,7 @@ local _yResolution 	-- number
 local _body			-- love physics body
 local _shape		-- love physics Shape
 local _fixture		-- love physics fixture
+local _trackedObject
 
 ---
 -- 
@@ -42,9 +43,20 @@ function load(self, xRes, yRes, world, x, y)
 	self._fixture:setFilterData( 0, 0, -1) --
 end
 
+function update(self)
+	if self._trackedObject then
+		self._body:setX((self._trackedObject._body:getX()-self._xResolution/2))
+		self._body:setY((self._trackedObject._body:getY()-self._yResolution/2))
+	end
+end
+
 ---
 -- Gets the resolution of the camera
 -- @return The X and Y resolution of the camera
 function getResolution(self)
 	return self._xResolution, self._yResolution
+end
+
+function track(self, physicsObject)
+	self._trackedObject = physicsObject
 end

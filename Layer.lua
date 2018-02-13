@@ -26,9 +26,8 @@ function load(self, backGround, xPlx, yPlx)
 	self._objects = {}
 	self._xParalax = xPlx or 1
 	self._yParalax = yPlx or 1
-	if backGround ~= nil then
-		backGround.layer = self
-	end
+	backGround = backGround or {}
+	backGround.layer = self
 	self._backGround = backGround
 
 end
@@ -38,7 +37,9 @@ end
 function update(self, dt)
 	self.xMod = self.stage.xMod*self._xParalax
 	self.yMod = self.stage.yMod*self._yParalax
-	self._backGround:update()
+	if self._backGround.update then	
+		self._backGround:update()
+	end
 	for _,v in pairs(self._objects) do
 		if v.update then
 			v:update(dt)
@@ -84,6 +85,10 @@ end
 -- @param object The object to remove
 function delete(self, object)
 	local object = self._objects[object.layerIndex]
+
+	if object.delete then
+		object:delete()
+	end
 
 	if object._fixture then
 		object._fixture:destroy()

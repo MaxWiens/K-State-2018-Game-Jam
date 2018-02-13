@@ -19,17 +19,29 @@ extends(_M, Object)
 
 local _player 
 local _animation
+local _dashDelay
+local _dashTimer 
 
 function load (self, player, flags)
-	
 	self._animation = 'idle_right'
+	player.controller = self
 	self._player = player
+	self._dashTimer = 0
+	self._dashDelay = 1
 end
 
 function update(self, dt)
 	-- updates Animation
 	self._player._animations[self._animation]:update(dt)
-	
+
+	if self._dashTimer < self._dashDelay and not self._player._flags.dashReady then
+		self._dashTimer = self._dashTimer + dt
+	else
+		self._dashTimer = 0
+		self._player._flags.dashReady = true
+	end
+
+
 	--print(self._player._flags.contactWall, self._player._flags.contactFloor)
 	vx, vy = self._player._body:getLinearVelocity()
 	if vx > 30 then
@@ -56,10 +68,10 @@ function update(self, dt)
 
 		
 		if self._player._flags.facing == 'right' and love.keyboard.isDown('left') and not love.keyboard.isDown('right') then
-			self._player._body:setLinearVelocity(-100,-100)
+			self._player._body:setLinearVelocity(-100,-130)
 			self._player._flags.facing = 'left'
 		elseif self._player._flags.facing == 'left' and love.keyboard.isDown('right') and not love.keyboard.isDown('left') then
-			self._player._body:setLinearVelocity(100,-100)
+			self._player._body:setLinearVelocity(100,-130)
 			self._player._flags.facing = 'right'
 		else
 			self._player._flags.walking = false
@@ -75,7 +87,17 @@ function update(self, dt)
 			self._player._flags.walking = false
 		end
 	end
+	if love.keyboard.isDown('down') then
+			self._player:drop()
+	end
 
+	if love.keyboard.isDown('escape') then
+			self._player._body:setPosition(192, 1504)
+	end
+
+	if self._player._flags.goal then
+		self.layer:delete(self)
+	end
 end
 
 function draw(self, xMod, yMod)

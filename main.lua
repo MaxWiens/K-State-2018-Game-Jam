@@ -7,6 +7,7 @@
 love.graphics.setDefaultFilter( 'nearest', 'nearest', anisotropy )
 local Settings = require'Settings'
 local Level1 = require'maps.Level1'
+local TestLevel = require'maps.TestLevel'
 local Camera = require'graphics.Camera'
 local Stage = require'Stage'
 -- End Imports
@@ -25,11 +26,15 @@ function love.load()
 	midWorld = love.physics.newWorld(0, 160)
 	metaWorld = love.physics.newWorld(0,0)
 
-	_camera = Camera:new(144, 256, metaWorld, 20, 200)
+	_camera = Camera:new(256, 144, metaWorld, 20, 200)
 
 	level1 = Level1:new(midWorld, metaWorld)
+	--level1 = TestLevel:new(midWorld, metaWorld)
 
 	_currentStage = level1:createStage(_camera)
+	source = love.audio.newSource( 'soft2.wav')
+	source:setLooping(true)
+	love.audio.play(source)
 
 end
 
@@ -38,7 +43,9 @@ function love.update(dt)
 	midWorld:setCallbacks( beginContact, endContact, preSolve, postSolve )
 	metaWorld:update(dt)
 	_currentStage:update(dt)
+	_camera:update()
 
+	--[[
 	_camera._body:setLinearVelocity(0,0)
 	if love.keyboard.isDown('w') then
 		_camera._body:setLinearVelocity(0,-100)
@@ -52,6 +59,7 @@ function love.update(dt)
 	if love.keyboard.isDown('d') then
 		_camera._body:setLinearVelocity(100,0)
 	end
+	]]--
 
 
 end

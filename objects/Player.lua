@@ -13,11 +13,13 @@ local love = love
 module('objects.Player')
 extends(_M, PhysicsObject)
 
+local layer
+local controller
+local _contactFlags
 local _flags
 local _body		-- love physics body
 local _shape	-- love physics Shape
 local _fixture	-- love physics fixture
-local _image
 local _quad
 local _animations
 local _flags
@@ -25,11 +27,13 @@ local _flags
 load = function (self, world, x, y)
 	local x = x or 0
 	local y = y or 0
+	self._contactFlags = contactFlags or {contactPlayer = true}
 	self._flags = flags or {
 		isActive = true,
 		walking = false,
 		facing = 'right',
-		contactWall = false
+		contactWall = false,
+		dashReady = true
 	}
 	self._body = love.physics.newBody(world, x, y, 'dynamic')
 	self._body:setFixedRotation(true)
@@ -49,8 +53,8 @@ load = function (self, world, x, y)
 		on_wall_left = Animation:new(Images.cinder.on_wall_left, 10, true, 0, 1, 1, 5, 12),
 		on_wall_right = Animation:new(Images.cinder.on_wall_right, 10, true, 0, 1, 1, 11, 12)
 	}
-	self._image = Images.ksgj.image
-	self._quad  = Images.ksgj.quads[1]
+
+	
 end
 
 function moveRight(self)
@@ -66,6 +70,27 @@ function moveLeft(self)
 end
 
 function jump(self)
-	self._body:applyLinearImpulse(0, -3)
+	self._body:applyLinearImpulse(0, -40)
 end
 
+function drop(self)
+	x, y = self._body:getLinearVelocity()
+	y = math.max(y, 120)
+	self._body:setLinearVelocity(x/1.1,y)
+end
+
+function cameraTrack(self)
+	self.controller.layer.stage.camera:track(self)
+end
+
+function dash(self)
+	x, y = self._body:getLinearVelocity()
+
+	if self._flags.facing == 'left'	then
+		x = math.min(x, -2000)
+		self._body:applyLinearImpulse(-10, 0)
+	else
+		x = math.max(x, 2000)
+		self._body:applyLinearImpulse(10, 0)
+	end
+end

@@ -28,7 +28,7 @@ function load(self, cam, layers, rgb)
 	rgb = rgb or {0,0,0}
 	local layers = layers or {}
 	self.camera = cam
-	self._layers = layers or {}
+	self._layers = layers
 	for _,v in pairs(self._layers) do
 		v.stage = self
 	end
@@ -58,6 +58,7 @@ end
 ---
 -- Add an object to the layer
 function setLayer(self, layerIndex, layer)
+	layer.stage = self
 	_layers[layerIndex] = layer
 end
 

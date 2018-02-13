@@ -19,7 +19,7 @@ function love.conf(t)
 	t.gammacorrect = settingsTable.video.gamma_correction
 
 	t.window.title = "Cinder - K-State 2018 Game Jam"
-	t.window.icon = nil
+	t.window.icon = 'images/icon.png'
 	t.window.width = settingsTable.video.window_width
 	t.window.height = settingsTable.video.window_height
 	t.window.borderless = settingsTable.video.borderless
